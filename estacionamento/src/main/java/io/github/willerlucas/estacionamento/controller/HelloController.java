@@ -4,13 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class EstacionamentoController {
+public class HelloController {
 
-	@RequestMapping("/") 
-	public String index() {
-
-		return "index";
+	@RequestMapping("/")
+	public String helloWorld() {
 		
+		return "index";
 	}
+	
 }
-

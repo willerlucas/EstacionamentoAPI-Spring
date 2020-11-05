@@ -1,6 +1,6 @@
 package io.github.willerlucas.estacionamento.model;
 
-public enum VeiculoTipo {
-	CARRO, 
-	MOTO;
+public enum TicketStatus {
+	ABERTO,
+	FINALIZADO;
 }

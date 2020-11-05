@@ -1,7 +1,8 @@
 package io.github.willerlucas.estacionamento.serviceImpl;
 
-import io.github.willerlucas.estacionamento.service.TicketService;
+import org.springframework.stereotype.Service;
 
-public class TicketServiceImpl implements TicketService {
+@Service
+public class TicketServiceImpl {
 
 }
