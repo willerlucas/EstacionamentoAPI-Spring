@@ -90,6 +90,7 @@ public class ClienteServiceImpl implements ClienteService {
 
 		cliente.setCPF(this.cpf);
 		cliente.setEmail(this.email);
+		
 		cliente.setNome(this.nome);
 		cliente.setTelefone(this.telefone);
 

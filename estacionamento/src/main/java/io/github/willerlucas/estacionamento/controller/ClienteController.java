@@ -120,7 +120,7 @@ public class ClienteController {
 		if (optionalCliente.isPresent() && optionalVeiculo.isPresent()) {
 			clienteService.rmvVeiculo(idc, idv, clienteRepository, veiculoRepository);
 			return ResponseEntity.ok().build();
-		}
+		} 
 		
 		return ResponseEntity.notFound().build();
 	}

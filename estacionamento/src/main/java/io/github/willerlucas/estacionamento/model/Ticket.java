@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,35 +19,55 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Table(name = "tb_ticket")
 public class Ticket {
 	
+	private static int PRECO = 2;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
-	@NotBlank
 	@ManyToOne
 	private Veiculo veiculo;
 
-	@NotBlank
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy-hh:mm")
 	private LocalDateTime entrada;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy-hh:mm")
 	private LocalDateTime saida;
 	
-	@NotBlank
+
 	private int preco;
 	
-	@NotBlank
+
 	@ManyToOne
 	private Vaga vaga;
 	
-	@NotBlank
 	@Enumerated(EnumType.STRING)
-	private TicketStatus status = TicketStatus.ABERTO;
+	private TicketStatus status;
 	
+	Ticket(){
+		
+	}
+
+	public Ticket(Ticket ticket) {
+		this.id = ticket.id;
+		this.entrada = LocalDateTime.now();
+		this.veiculo = ticket.veiculo;
+		this.preco = PRECO;
+		this.status = TicketStatus.ABERTO;
+		this.vaga = ticket.vaga;
+	}
 
 	public long getId() {
 		return id;
+	}
+
+	public TicketStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TicketStatus status) {
+		this.status = status;
 	}
 
 	public void setId(long id) {
