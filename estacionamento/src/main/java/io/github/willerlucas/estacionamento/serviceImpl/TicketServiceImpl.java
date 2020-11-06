@@ -1,6 +1,8 @@
 package io.github.willerlucas.estacionamento.serviceImpl;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,8 @@ import io.github.willerlucas.estacionamento.service.TicketService;
 
 @Service
 public class TicketServiceImpl implements TicketService {
+
+	private static final long PRECO_HORA = 3;
 
 	private Veiculo veiculo;
 	
@@ -158,23 +162,21 @@ public class TicketServiceImpl implements TicketService {
 		ticket.setStatus(TicketStatus.FINALIZADO);
 		
 		//metodo calcular preço
-		int valorTotal = calcularPreco(ticket.getSaida(), ticket.getEntrada());
-		ticket.setPreco(valorTotal);
+		long valorTotal = calcularPreco(ticket.getSaida(), ticket.getEntrada());
+		System.out.println("chegou aqui    "+valorTotal);
+		ticket.setPreco((int) valorTotal);
 		
 		ticketRepository.save(ticket);
-		
 		
 		
 		return ticket;
 
 	}
 
-	private int calcularPreco(LocalDateTime saida, LocalDateTime entrada) {
-		
-		int preco = 0;
-		
-		return preco;
-				 
+	private long calcularPreco(LocalDateTime saida, LocalDateTime entrada) {
+				
+		return ((Duration.between(entrada, saida).toHours()) * PRECO_HORA);
+			 
 	}
 
 }
