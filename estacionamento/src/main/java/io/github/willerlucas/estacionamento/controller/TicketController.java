@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import io.github.willerlucas.estacionamento.model.Ticket;
+import io.github.willerlucas.estacionamento.model.Vaga;
 import io.github.willerlucas.estacionamento.repository.TicketRepository;
+import io.github.willerlucas.estacionamento.repository.VagaRepository;
 import io.github.willerlucas.estacionamento.repository.VeiculoRepository;
 import io.github.willerlucas.estacionamento.service.ClienteService;
 import io.github.willerlucas.estacionamento.service.TicketService;
 import io.github.willerlucas.estacionamento.serviceImpl.TicketServiceImpl;
+import io.github.willerlucas.estacionamento.serviceImpl.VagaServiceImpl;
 
 @RestController
 public class TicketController {
@@ -37,6 +40,12 @@ public class TicketController {
 
 	@Autowired
 	TicketService ticketService;
+	
+	@Autowired
+	VagaServiceImpl vagaService;
+	
+	@Autowired
+	VagaRepository vagaRepository;
 
 	// motodos
 
@@ -74,8 +83,7 @@ public class TicketController {
 		Ticket ticket = new Ticket(ticketParam);
 		
 		ticketService.save(ticket);
-	
-		//metodo para ocupar vaga
+		vagaService.ocuparVaga(ticket.getVaga().getId());
 		
 		
 		URI uri = uriBuilder.path("/ticket/{id}").buildAndExpand(ticket.getId()).toUri();
@@ -90,11 +98,10 @@ public class TicketController {
 		
 		if (optionalTicket.isPresent()) {
 			
-			
 			Ticket ticket = ticketService.finalizar(id, ticketRepository);
+			
 						
-			System.out.println("chegou aqui");
-			return ResponseEntity.ok(ticket);
+			return ResponseEntity.ok(new Ticket(ticket));
 
 		}
 		

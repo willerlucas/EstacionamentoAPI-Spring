@@ -26,6 +26,8 @@ public interface TicketService {
 
 		//fechando um ticket
 		public Ticket finalizar(Long id, TicketRepository ticketRepository);
+
+		//public Ticket finalizar(Ticket ticket);
 		
 		
 		

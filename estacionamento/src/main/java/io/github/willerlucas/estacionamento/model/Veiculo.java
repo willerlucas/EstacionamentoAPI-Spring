@@ -16,7 +16,7 @@ public class Veiculo {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long Id;
 	
-	@NotBlank
+	//@NotBlank
 	private String placa;
 	
 	@NotBlank
@@ -34,9 +34,15 @@ public class Veiculo {
 	public Veiculo(Veiculo veiculo) {
 		this.Id = veiculo.Id;
 		this.modelo = veiculo.modelo;
-		this.placa = veiculo.placa;
 		this.tipo = veiculo.tipo;
 		this.zeroKm = veiculo.isZeroKm();
+		
+		if(veiculo.isZeroKm()) {	
+			veiculo.setPlaca("AAA-000");
+		} else {
+			veiculo.setPlaca(veiculo.placa);
+		}
+		
 	}
 
 	public long getId() {

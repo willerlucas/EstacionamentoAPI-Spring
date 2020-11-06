@@ -2,30 +2,39 @@ package io.github.willerlucas.estacionamento.serviceImpl;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import org.joda.time.Hours;
-import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.github.willerlucas.estacionamento.controller.VagaController;
 import io.github.willerlucas.estacionamento.model.Ticket;
 import io.github.willerlucas.estacionamento.model.TicketStatus;
 import io.github.willerlucas.estacionamento.model.Vaga;
+import io.github.willerlucas.estacionamento.model.VagaStatus;
 import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.repository.TicketRepository;
+import io.github.willerlucas.estacionamento.repository.VagaRepository;
 import io.github.willerlucas.estacionamento.service.TicketService;
 
 @Service
 public class TicketServiceImpl implements TicketService {
 
+	
+	/*
+	 * metodos e tratamentos que ainda faltam
+	 * impedir que um ticket finalizado seja finalizado novamente
+	 * impedir que uma vaga ocupada seja ocupada dnv (falta transformar em um metodo)
+	 * impedir que um veiculo com ticket em aberto seja estacionado
+	 * 
+	 */
+	
 	private static final long PRECO_HORA = 3;
 
 	private Veiculo veiculo;
@@ -39,10 +48,7 @@ public class TicketServiceImpl implements TicketService {
 	private Vaga vaga;
 	
 	@Enumerated(EnumType.STRING)
-	private TicketStatus status = TicketStatus.FINALIZADO;
-
-	
-	
+	private TicketStatus status;
 	
 	public Veiculo getVeiculo() {
 		return veiculo;
@@ -92,20 +98,14 @@ public class TicketServiceImpl implements TicketService {
 		this.ticketRepository = ticketRepository;
 	}
 
-	void TicketService(){
-		
-	}
-	
-//	public TicketServiceImpl(Ticket ticket) {
-//		this.saida = ticket.getSaida();
-//		this.status = ticket.getStatus();
-//		this.vaga = ticket.getVaga();
-//	}
-//	
-	
 	
 	@Autowired
 	TicketRepository ticketRepository;
+	@Autowired
+	VagaRepository vagaRepository;
+	@Autowired
+	VagaServiceImpl vagaService;
+	
 
 	@Override
 	public List<Ticket> findAll() {
@@ -121,7 +121,12 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public Ticket save(Ticket ticket) {
 
-		//ticket.setEntrada(LocalDateTime.now());
+		
+		//verifica vaga
+		if(vagaService.verificaVaga(ticket.getVaga().getId()))
+			return null;
+		    //return VagaOcupadaException();
+
 		
 		return ticketRepository.save(ticket);
 		
@@ -153,30 +158,40 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public Ticket finalizar(Long id, TicketRepository ticketRepository) {
-		
-		
+	
 		Ticket ticket = ticketRepository.getOne(id);
 		
+		//verificando se o ticket já está finalizado
+		if(ticket.getSaida() != null) {
+			//retorna o mesmo ticket e não faz alterações
+			return ticket;
+		}
 
 		ticket.setSaida(LocalDateTime.now());
 		ticket.setStatus(TicketStatus.FINALIZADO);
-		
-		//metodo calcular preço
+		ticket.getVaga().setStatus(VagaStatus.LIVRE);
+			
 		long valorTotal = calcularPreco(ticket.getSaida(), ticket.getEntrada());
 		System.out.println("chegou aqui    "+valorTotal);
 		ticket.setPreco((int) valorTotal);
-		
+
 		ticketRepository.save(ticket);
-		
+
 		
 		return ticket;
 
 	}
 
+	
+	
 	private long calcularPreco(LocalDateTime saida, LocalDateTime entrada) {
 				
-		return ((Duration.between(entrada, saida).toHours()) * PRECO_HORA);
+		//como o metodo trunca o valor recebido, somei +1 para que o ticket sempre
+		//cobre A hora incial + as adicionais
+		
+		// ex: se ficar 1h30, vai pagar 2h (1 truncado + 1 adicional)
+		return (((Duration.between(entrada, saida).toHours())+1) * PRECO_HORA);
+		
 			 
 	}
-
 }

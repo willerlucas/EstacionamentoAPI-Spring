@@ -13,14 +13,16 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import io.github.willerlucas.estacionamento.repository.VagaRepository;
 
 @Entity
 @Table(name = "tb_ticket")
 public class Ticket {
-	
-	private static int PRECO = 2;
-	
+		
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -48,17 +50,16 @@ public class Ticket {
 	Ticket(){
 		
 	}
-
+	
 	public Ticket(Ticket ticket) {
-		this.id = ticket.id;
+		//this.id = ticket.id;
 		this.entrada = LocalDateTime.now();
 		this.veiculo = ticket.veiculo;
-		this.preco = PRECO;
 		this.status = TicketStatus.ABERTO;
-		this.vaga = ticket.vaga;
+		this.vaga = ticket.vaga;			
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -70,7 +71,7 @@ public class Ticket {
 		this.status = status;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
