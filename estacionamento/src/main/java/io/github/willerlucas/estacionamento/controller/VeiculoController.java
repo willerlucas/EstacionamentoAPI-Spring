@@ -58,10 +58,13 @@ public class VeiculoController {
 		@Transactional
 		public ResponseEntity<Veiculo> saveVeiculo(@RequestBody @Valid Veiculo veiculo, BindingResult result, RedirectAttributes attributes, UriComponentsBuilder uriBuilder) {
 			
-			veiculoService.save(veiculo);
+			if(veiculoService.save(veiculo) == null) {
+				return ResponseEntity.badRequest().build();
+			}
 			
 			URI uri = uriBuilder.path("/veiculo/{id}").buildAndExpand(veiculo.getId()).toUri();
-			return ResponseEntity.created(uri).body(new Veiculo(veiculo));
+			return ResponseEntity.created(uri).build();	
+			
 		}
 			
 		//deletando um veiculo
@@ -85,8 +88,8 @@ public class VeiculoController {
 		public ResponseEntity<Veiculo> atualizar(@PathVariable Long id, @RequestBody @Valid VeiculoServiceImpl veiculoService) {
 			Optional<Veiculo> optional = veiculoRepository.findById(id);
 			if (optional.isPresent()) {
-				Veiculo veiculo = veiculoService.atualizar(id, veiculoRepository);
-				return ResponseEntity.ok(new Veiculo(veiculo));
+				veiculoService.atualizar(id, veiculoRepository);
+				return ResponseEntity.ok().build();
 			}
 			
 			return ResponseEntity.notFound().build();

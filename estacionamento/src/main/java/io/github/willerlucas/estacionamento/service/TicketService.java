@@ -2,6 +2,7 @@ package io.github.willerlucas.estacionamento.service;
 
 import java.util.List;
 
+import io.github.willerlucas.estacionamento.config.validacao.VeiculoJaEstacionadoException;
 import io.github.willerlucas.estacionamento.model.Ticket;
 import io.github.willerlucas.estacionamento.repository.TicketRepository;
 
@@ -15,7 +16,7 @@ public interface TicketService {
 		Ticket findById(long id);
 		
 		//receber um ticket pra salvar no banco de dados
-		Ticket save(Ticket ticket);
+		Ticket save(Ticket ticket) throws VeiculoJaEstacionadoException;
 		
 		
 		//encontrar tickets abertos

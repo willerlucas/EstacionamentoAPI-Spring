@@ -31,6 +31,8 @@ public interface VeiculoService {
 	Veiculo save(Veiculo veiculo);
 	
 	public void deleteVeiculobyId(Long id, VeiculoRepository veiculoRepository);
+	
+	public boolean verificaVeiculoDono(Veiculo veiculo);
 
 	
 	

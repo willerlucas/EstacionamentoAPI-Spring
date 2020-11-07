@@ -1,7 +1,6 @@
 package io.github.willerlucas.estacionamento.serviceImpl;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -9,11 +8,13 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.github.willerlucas.estacionamento.config.validacao.VeiculoJaPossuiDono;
 import io.github.willerlucas.estacionamento.model.Cliente;
 import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.repository.ClienteRepository;
 import io.github.willerlucas.estacionamento.repository.VeiculoRepository;
 import io.github.willerlucas.estacionamento.service.ClienteService;
+import io.github.willerlucas.estacionamento.service.VeiculoService;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -34,6 +35,8 @@ public class ClienteServiceImpl implements ClienteService {
 	
 	@Autowired
 	ClienteRepository clienteRepository;
+	@Autowired
+	VeiculoService veiculoService;
 
 	public String getNome() {
 		return nome;
@@ -103,8 +106,19 @@ public class ClienteServiceImpl implements ClienteService {
 		
 		Cliente cliente = clienteRepository.getOne(idc);
 		Veiculo veiculo = veiculoRepository.getOne(idv);
+		Veiculo aux = veiculo;
+		//verifica se o veiculo ja possui dono
+		//try {
+			//if (veiculoService.verificaVeiculoDono(veiculo)) throw new VeiculoJaPossuiDono();
+			cliente.addVeiculo(veiculo);
+		//} catch (VeiculoJaPossuiDono e) {
+			//System.out.println("Veiculo ja possui dono");
+		//}
+		
+	
+		
 
-		cliente.addVeiculo(veiculo);
+		
 	}
 
 	@Override

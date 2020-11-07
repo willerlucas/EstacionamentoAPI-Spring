@@ -16,7 +16,7 @@ public class Veiculo {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long Id;
 	
-	//@NotBlank
+	@NotBlank
 	private String placa;
 	
 	@NotBlank

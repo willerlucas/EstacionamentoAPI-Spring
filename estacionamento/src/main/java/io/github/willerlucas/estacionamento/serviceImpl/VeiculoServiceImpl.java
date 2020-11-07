@@ -17,25 +17,22 @@ import io.github.willerlucas.estacionamento.repository.VeiculoRepository;
 import io.github.willerlucas.estacionamento.service.VeiculoService;
 
 @Service
-public class VeiculoServiceImpl implements VeiculoService{
+public class VeiculoServiceImpl implements VeiculoService {
 
 	private String placa;
-	
+
 	@NotNull
 	private String modelo;
-	
 
 	@Enumerated(EnumType.STRING)
 	private VeiculoTipo tipo;
-	
+
 	@NotNull
 	private boolean zeroKm;
 
-	
 	@Autowired
 	VeiculoRepository veiculoRepository;
-	
-	
+
 	public String getPlaca() {
 		return placa;
 	}
@@ -67,24 +64,24 @@ public class VeiculoServiceImpl implements VeiculoService{
 	public void setZeroKm(boolean zeroKm) {
 		this.zeroKm = zeroKm;
 	}
-	
-	//atualizando veiculo
+
+	// atualizando veiculo
 	@Override
 	public Veiculo atualizar(Long id, VeiculoRepository veiculoRepository) {
 		Veiculo veiculo = veiculoRepository.getOne(id);
-		
+
 		veiculo.setModelo(this.modelo);
 		veiculo.setTipo(this.tipo);
-	
-		if(veiculo.isZeroKm()) {	
+
+		if (veiculo.isZeroKm()) {
 			veiculo.setPlaca("AAA-000");
 		} else {
 			veiculo.setPlaca(this.placa);
 		}
-		
+
 		return veiculo;
 	}
-	
+
 	@Override
 	public List<Veiculo> findAll() {
 
@@ -98,12 +95,27 @@ public class VeiculoServiceImpl implements VeiculoService{
 
 	@Override
 	public Veiculo save(Veiculo veiculo) {
+		try {
 		return veiculoRepository.save(veiculo);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
 	}
 
 	@Override
 	public void deleteVeiculobyId(Long id, VeiculoRepository veiculoRepository) {
-		veiculoRepository.deleteById(id);	
+		veiculoRepository.deleteById(id);
+	}
+	
+	@Override
+	public boolean verificaVeiculoDono(Veiculo veiculo) {
+
+		int dono = veiculoRepository.verificaVeiculoDono(veiculo);
+		if (dono >= 1)
+			return true;
+		return false;
+
 	}
 
 }

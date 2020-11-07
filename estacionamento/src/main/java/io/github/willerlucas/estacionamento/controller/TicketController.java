@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import io.github.willerlucas.estacionamento.config.validacao.VeiculoJaEstacionadoException;
 import io.github.willerlucas.estacionamento.model.Ticket;
-import io.github.willerlucas.estacionamento.model.Vaga;
 import io.github.willerlucas.estacionamento.repository.TicketRepository;
 import io.github.willerlucas.estacionamento.repository.VagaRepository;
 import io.github.willerlucas.estacionamento.repository.VeiculoRepository;
@@ -40,10 +40,10 @@ public class TicketController {
 
 	@Autowired
 	TicketService ticketService;
-	
+
 	@Autowired
 	VagaServiceImpl vagaService;
-	
+
 	@Autowired
 	VagaRepository vagaRepository;
 
@@ -77,35 +77,53 @@ public class TicketController {
 
 	// novoTicket(recebe um carro e uma vaga, ocupa a vaga)
 	@PostMapping("ticket/adicionar")
-	public ResponseEntity<Ticket> saveTicket(@RequestBody @Valid Ticket ticketParam, UriComponentsBuilder uriBuilder){
-			
-		//o objetivo dessa linha foi instanciar o contrutor pra poder recuperar os dados definidos na classe Modelo
+	public ResponseEntity<Ticket> saveTicket(@RequestBody @Valid Ticket ticketParam, UriComponentsBuilder uriBuilder)
+			throws VeiculoJaEstacionadoException {
+
+		// o objetivo dessa linha foi instanciar o contrutor pra poder recuperar os
+		// dados definidos na classe Modelo
 		Ticket ticket = new Ticket(ticketParam);
-		
-		ticketService.save(ticket);
-		vagaService.ocuparVaga(ticket.getVaga().getId());
-		
-		
-		URI uri = uriBuilder.path("/ticket/{id}").buildAndExpand(ticket.getId()).toUri();
-		return ResponseEntity.created(uri).body(new Ticket(ticket)); //o que estava sendo apresentado era só o body mas o objeto nao estava sendo criado 
+
+		if (ticketService.save(ticket) == null) {
+			System.out.println("entrou no nulo");
+			return ResponseEntity.badRequest().build();
+		} else {
+
+			ticketService.save(ticket);
+			// System.out.println(ticket);
+			vagaService.ocuparVaga(ticket.getVaga().getId());
+
+			URI uri = uriBuilder.path("/ticket/{id}").buildAndExpand(ticket.getId()).toUri();
+			return ResponseEntity.created(uri).build(); // o que estava sendo apresentado era só o body mas o objeto nao
+														// estava sendo criado
+		}
+
 	}
-	
 
 	// finalizarTicket(chama o metodo calcular preco e finaliza, libera a vaga)
 	@PutMapping("ticket/finalizar/{id}")
 	public ResponseEntity<Ticket> finalizarTicket(@PathVariable Long id, TicketServiceImpl ticketService) {
 		Optional<Ticket> optionalTicket = ticketRepository.findById(id);
+
 		
 		if (optionalTicket.isPresent()) {
-			
-			Ticket ticket = ticketService.finalizar(id, ticketRepository);
-			
-						
-			return ResponseEntity.ok(new Ticket(ticket));
 
+			//se estiver presente e receber valor null do metodo finalizar, responde bad
+			//request, senão fianaliza
+			if (ticketService.finalizar(id, ticketRepository) == null) {
+				System.out.println("Esse ticket provavelmente ja foi finalizado");
+				return ResponseEntity.badRequest().build();
+				
+			} else {
+
+				ticketService.finalizar(id, ticketRepository);
+				return ResponseEntity.ok().build();
+
+			}
 		}
-		
+
+		//se nao estiver presente retorna not found
 		return ResponseEntity.notFound().build();
 	}
-	
+
 }
