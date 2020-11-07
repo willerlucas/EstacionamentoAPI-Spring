@@ -29,7 +29,7 @@ public interface TicketService {
 
 		//public Ticket finalizar(Ticket ticket);
 		
-		
+		public boolean verificaVeiculo(Ticket ticket);
 		
 	
 	

@@ -16,7 +16,10 @@ import io.github.willerlucas.estacionamento.model.Cliente;
 import io.github.willerlucas.estacionamento.model.Ticket;
 import io.github.willerlucas.estacionamento.model.Vaga;
 import io.github.willerlucas.estacionamento.model.VagaStatus;
+import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.repository.VagaRepository;
+import io.github.willerlucas.estacionamento.repository.VeiculoRepository;
+import io.github.willerlucas.estacionamento.service.VeiculoService;
 
 @Service
 public class VagaServiceImpl {
@@ -33,7 +36,7 @@ public class VagaServiceImpl {
 	
 	
 	
-	protected boolean verificaVaga(Long id) {
+	public boolean verificaVaga(Long id) {
 
 		System.out.println("Vaga id: " + id);
 		Vaga vaga = vagaRepository.findById(id).get();
@@ -47,17 +50,17 @@ public class VagaServiceImpl {
 	}
 
 
-
-	public Vaga ocuparVaga(Long id2) {
+	
+	public Vaga ocuparVaga(Long id) {
 		
-		Vaga vaga = vagaRepository.getOne(id2);
+		Vaga vaga = vagaRepository.getOne(id);
 		vaga.setStatus(VagaStatus.OCUPADA);
 		vagaRepository.save(vaga);
 		return vaga;
 	}
 
 
-
+	
 	public Vaga liberarVaga(Long id2, VagaRepository vagaRepository2) {
 		Vaga vaga = vagaRepository2.getOne(id2);
 		vaga.setStatus(VagaStatus.LIVRE);
@@ -66,16 +69,18 @@ public class VagaServiceImpl {
 	}
 
 
-
+	
 	public List<Vaga> findAll() {
 		// TODO Auto-generated method stub
 		return vagaRepository.findAll();
 	}
 
 
-
+	
 	public Vaga findById(long id) {
 		return vagaRepository.findById(id).get();
 	}
+
+
 
 }

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
 
+import io.github.willerlucas.estacionamento.model.Ticket;
 import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.model.VeiculoTipo;
 import io.github.willerlucas.estacionamento.repository.ClienteRepository;
@@ -30,6 +31,7 @@ public interface VeiculoService {
 	Veiculo save(Veiculo veiculo);
 	
 	public void deleteVeiculobyId(Long id, VeiculoRepository veiculoRepository);
+
 	
 	
 }

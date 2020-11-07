@@ -34,7 +34,7 @@ public class VagaController {
 		Optional<Vaga> optional = vagaRepository.findById(id);
 		if (optional.isPresent()) {
 			Vaga vaga = vagaService.ocuparVaga(id);
-			return ResponseEntity.ok(new Vaga(vaga));
+			return ResponseEntity.ok(optional.get());
 		}
 		
 		return ResponseEntity.notFound().build();

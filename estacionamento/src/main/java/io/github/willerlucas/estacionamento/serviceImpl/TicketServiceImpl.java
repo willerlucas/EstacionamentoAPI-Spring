@@ -22,6 +22,7 @@ import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.repository.TicketRepository;
 import io.github.willerlucas.estacionamento.repository.VagaRepository;
 import io.github.willerlucas.estacionamento.service.TicketService;
+import io.github.willerlucas.estacionamento.service.VeiculoService;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -105,6 +106,8 @@ public class TicketServiceImpl implements TicketService {
 	VagaRepository vagaRepository;
 	@Autowired
 	VagaServiceImpl vagaService;
+	@Autowired
+	VeiculoService veiculoService;
 	
 
 	@Override
@@ -126,6 +129,10 @@ public class TicketServiceImpl implements TicketService {
 		if(vagaService.verificaVaga(ticket.getVaga().getId()))
 			return null;
 		    //return VagaOcupadaException();
+		
+		//verifica se o carro já está estacionado em outra vaga
+		if(verificaVeiculo(ticket))
+			return null;
 
 		
 		return ticketRepository.save(ticket);
@@ -194,4 +201,44 @@ public class TicketServiceImpl implements TicketService {
 		
 			 
 	}
+
+	@Override
+	public boolean verificaVeiculo(Ticket ticket) {
+		
+		//percorre todos os ticket abertos verificando se tem algum ID correspondente ai id do carro
+		
+		//Long veiculo = ticket.getVeiculo().getId();
+		System.out.println("entrei na verificavao de vericulo");
+		int verificaEstacionado = ticketRepository.verificaVeiculo(ticket.getVeiculo().getId());
+		if(verificaEstacionado >= 1) {
+			System.out.println("entrei na verificavao de vericulo ocupado");
+			return true;
+		}
+		
+		
+		return false;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
