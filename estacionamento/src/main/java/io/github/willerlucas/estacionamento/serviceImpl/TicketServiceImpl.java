@@ -5,15 +5,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.github.willerlucas.estacionamento.config.validacao.TicketJaFinalizadoException;
 import io.github.willerlucas.estacionamento.config.validacao.VeiculoJaEstacionadoException;
 import io.github.willerlucas.estacionamento.config.validacao.vagaJaOcupadaException;
 import io.github.willerlucas.estacionamento.model.Ticket;
 import io.github.willerlucas.estacionamento.model.TicketStatus;
+import io.github.willerlucas.estacionamento.model.Vaga;
 import io.github.willerlucas.estacionamento.model.VagaStatus;
+import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.repository.TicketRepository;
 import io.github.willerlucas.estacionamento.repository.VagaRepository;
 import io.github.willerlucas.estacionamento.service.TicketService;
@@ -22,7 +29,76 @@ import io.github.willerlucas.estacionamento.service.VeiculoService;
 @Service
 public class TicketServiceImpl implements TicketService {
 
+	/*
+	 * metodos e tratamentos que ainda faltam impedir que um ticket finalizado seja
+	 * finalizado novamente impedir que uma vaga ocupada seja ocupada dnv (falta
+	 * transformar em um metodo) impedir que um veiculo com ticket em aberto seja
+	 * estacionado
+	 * 
+	 */
+
 	private static final long PRECO_HORA = 3;
+
+	private Veiculo veiculo;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy-hh:mm")
+	private LocalDateTime entrada = LocalDateTime.now();
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy-hh:mm")
+	private LocalDateTime saida;
+
+	private Vaga vaga;
+
+	@Enumerated(EnumType.STRING)
+	private TicketStatus status;
+
+	public Veiculo getVeiculo() {
+		return veiculo;
+	}
+
+	public void setVeiculo(Veiculo veiculo) {
+		this.veiculo = veiculo;
+	}
+
+	public LocalDateTime getEntrada() {
+		return entrada;
+	}
+
+	public void setEntrada(LocalDateTime entrada) {
+		this.entrada = entrada;
+	}
+
+	public LocalDateTime getSaida() {
+		return saida;
+	}
+
+	public void setSaida(LocalDateTime saida) {
+		this.saida = saida;
+	}
+
+	public Vaga getVaga() {
+		return vaga;
+	}
+
+	public void setVaga(Vaga vaga) {
+		this.vaga = vaga;
+	}
+
+	public TicketStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TicketStatus status) {
+		this.status = status;
+	}
+
+	public TicketRepository getTicketRepository() {
+		return ticketRepository;
+	}
+
+	public void setTicketRepository(TicketRepository ticketRepository) {
+		this.ticketRepository = ticketRepository;
+	}
 
 	@Autowired
 	TicketRepository ticketRepository;
@@ -47,21 +123,19 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public Ticket save(Ticket ticket) throws VeiculoJaEstacionadoException {
 
-		// verifica vaga e se veiculo ja está estacionado
+		
+		//verifica vaga e se veiculo ja está estacionado
 		try {
-			if (vagaService.verificaVaga(ticket.getVaga().getId()))
-				throw new vagaJaOcupadaException(ticket.getVaga());
-			if (verificaVeiculo(ticket))
-				throw new VeiculoJaEstacionadoException("Veiculo ja está estacionado");
+		if(vagaService.verificaVaga(ticket.getVaga().getId())) throw new vagaJaOcupadaException(ticket.getVaga());
+		if(verificaVeiculo(ticket)) throw new VeiculoJaEstacionadoException(ticket);
 		} catch (vagaJaOcupadaException | VeiculoJaEstacionadoException e) {
 			return null;
 		}
-
+		
 		return ticketRepository.save(ticket);
-
+		
 	}
 
-	// metodo para listar todos os tickets em aberto
 	@Override
 	public List<Ticket> listaAbertos() {
 
@@ -74,7 +148,6 @@ public class TicketServiceImpl implements TicketService {
 
 	}
 
-	// metodo para listar todos os tickets finalizados
 	@Override
 	public List<Ticket> listaFechados() {
 
@@ -94,9 +167,8 @@ public class TicketServiceImpl implements TicketService {
 
 		// verificando se o ticket já está finalizado
 		try {
-			if (ticket.getSaida() != null)
-				throw new TicketJaFinalizadoException(ticket);
-		} catch (TicketJaFinalizadoException e) {
+			if (ticket.getSaida() != null) throw new TicketJaFinalizadoException(ticket);
+		} catch (TicketJaFinalizadoException e){
 			return null;
 		}
 
@@ -128,13 +200,15 @@ public class TicketServiceImpl implements TicketService {
 	public boolean verificaVeiculo(Ticket ticket) {
 
 		// percorre todos os ticket abertos verificando se tem algum ID correspondente
-		// a id do carro
+		// ai id do carro
 
-		// tentei passar o objeto mas estava por algum motivo obscuro dando nullPointer
+		// Long veiculo = ticket.getVeiculo().getId();
+		System.out.println("entrei na verificavao de vericulo");
 		int verificaEstacionado = ticketRepository.verificaVeiculo(ticket.getVeiculo().getId());
-
-		if (verificaEstacionado >= 1)
+		if (verificaEstacionado >= 1) {
+			System.out.println("entrei na verificavao de vericulo ocupado");
 			return true;
+		}
 
 		return false;
 	}

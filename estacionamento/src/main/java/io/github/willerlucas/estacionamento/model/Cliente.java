@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tb_cliente")
@@ -20,21 +19,21 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull(message = "Por favor informe o CPF do cliente") 
+	@NotBlank 
 	private String CPF;
 	
-	@NotNull(message = "Por favor informe o NOME do cliente") 
+	@NotBlank
 	private String nome;
 	
 	private String email;
 	
-	@NotNull(message = "Por favor informe o TELEFONE do cliente") 
+	@NotBlank
 	private String telefone;
 	
 	@OneToMany
 	private List<Veiculo> veiculos = new ArrayList<>();
 
-	public Cliente(){
+	Cliente(){
 		
 	}
 	

@@ -6,7 +6,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tb_vaga")
@@ -19,7 +21,7 @@ public class Vaga {
 	@Enumerated(EnumType.STRING)
 	private VagaStatus status;
 	
-	public Vaga(){
+	Vaga(){
 		
 	}
 	
@@ -47,53 +49,3 @@ public class Vaga {
 	
 	
 }
-/*
-  public Ticket preparaTesteBasico(int qtAtivos, int qtAtivosPorVeiculo) {
-        Ticket ticketParaTestar = getTicket();
-
- 
-
-        when(ticketRepositoryMock.getQuantidadeTicketsAtivos()).thenReturn(qtAtivos);
-        when(ticketRepositoryMock.existsByVeiculo(ticketParaTestar.getVeiculo().getPlaca()))
-                .thenReturn(qtAtivosPorVeiculo);
-        when(clienteRepositoryMock.getByCpf(ticketParaTestar.getCliente().getCpf()))
-                .thenReturn(ticketParaTestar.getCliente());
-        when(clienteRepositoryMock.save(ticketParaTestar.getCliente())).thenReturn(ticketParaTestar.getCliente());
-        when(veiculoRepositoryMock.getByPlaca(ticketParaTestar.getVeiculo().getPlaca()))
-                .thenReturn(ticketParaTestar.getVeiculo());
-        when(veiculoRepositoryMock.save(ticketParaTestar.getVeiculo())).thenReturn(ticketParaTestar.getVeiculo());
-        when(ticketRepositoryMock.save(ticketParaTestar)).thenReturn(ticketParaTestar);
-
- 
-
-        return ticketParaTestar;
-    }
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,11 +2,10 @@ package io.github.willerlucas.estacionamento.config.validacao;
 
 import io.github.willerlucas.estacionamento.model.Ticket;
 
-@SuppressWarnings("serial")
 public class VeiculoJaEstacionadoException extends Exception {
 
-	public VeiculoJaEstacionadoException(String message) {
-		super(message);
+	public VeiculoJaEstacionadoException(Ticket ticket) {
+		System.out.println("O veículo já está estacionado");
 	}
 
 }

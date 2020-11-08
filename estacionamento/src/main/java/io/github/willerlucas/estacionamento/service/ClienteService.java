@@ -1,8 +1,12 @@
 package io.github.willerlucas.estacionamento.service;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
 
 import io.github.willerlucas.estacionamento.model.Cliente;
+import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.repository.ClienteRepository;
 import io.github.willerlucas.estacionamento.repository.VeiculoRepository;
 

@@ -4,14 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.github.willerlucas.estacionamento.model.Cliente;
 import io.github.willerlucas.estacionamento.model.Vaga;
 import io.github.willerlucas.estacionamento.repository.VagaRepository;
 import io.github.willerlucas.estacionamento.serviceImpl.VagaServiceImpl;
@@ -30,8 +33,7 @@ public class VagaController {
 	public ResponseEntity<Vaga> ocuparVaga(@PathVariable Long id, VagaServiceImpl vagaService) {
 		Optional<Vaga> optional = vagaRepository.findById(id);
 		if (optional.isPresent()) {
-			//Vaga vaga = vagaService.ocuparVaga(id);
-			vagaService.ocuparVaga(id);
+			Vaga vaga = vagaService.ocuparVaga(id);
 			return ResponseEntity.ok(optional.get());
 		}
 		

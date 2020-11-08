@@ -10,9 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import io.github.willerlucas.estacionamento.repository.VagaRepository;
 
 @Entity
 @Table(name = "tb_ticket")
@@ -22,7 +27,6 @@ public class Ticket {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull(message = "por favor informe o veiculo")
 	@ManyToOne
 	private Veiculo veiculo;
 
@@ -33,17 +37,17 @@ public class Ticket {
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy-hh:mm")
 	private LocalDateTime saida;
 	
-	
+
 	private int preco;
 	
-	@NotNull(message = "por favor informe o codigo da vaga")
+
 	@ManyToOne
 	private Vaga vaga;
 	
 	@Enumerated(EnumType.STRING)
 	private TicketStatus status;
 	
-	public Ticket(){
+	Ticket(){
 		
 	}
 	

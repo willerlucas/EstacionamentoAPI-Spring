@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+
 import io.github.willerlucas.estacionamento.model.Cliente;
 import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.repository.ClienteRepository;
@@ -40,13 +41,19 @@ public class ClienteController {
 	//recuperando todos os clientes
 	@GetMapping("/cliente")
 	public List<Cliente> getClientes() {
-		return clienteService.findAll();
+		List<Cliente> cliente = clienteService.findAll(); 
+		return cliente;
 	}
 	
 	//recuperando um unico cliente
 	@GetMapping("cliente/{id}") 
 	public Cliente getUniqueCliente(@PathVariable("id") long id) {
-		return clienteService.findById(id);
+		
+		//filtrando por Id
+		Cliente cliente = clienteService.findById(id); 
+		
+		return cliente;
+		
 	}
 		
 	//cadastrando um cliente
@@ -64,10 +71,13 @@ public class ClienteController {
 	@Transactional
 	public ResponseEntity<?> remover(@PathVariable Long id, ClienteServiceImpl clienteService) {
 		Optional<Cliente> optional = clienteRepository.findById(id);
-		
 		if (optional.isPresent()) {
+			
+			//Long idAuxiliar = (Long) id;
 			clienteService.deleteClientebyId(id, clienteRepository);
+			//clienteRepository.deleteById(id);
 			return ResponseEntity.ok().build();
+			
 		}
 		
 		return ResponseEntity.notFound().build();

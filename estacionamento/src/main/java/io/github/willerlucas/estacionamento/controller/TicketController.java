@@ -47,13 +47,13 @@ public class TicketController {
 	@Autowired
 	VagaRepository vagaRepository;
 
+	// motodos
 
 	// listando todos os ticket (finalizados e abertos)
 	@GetMapping("/ticket")
 	public List<Ticket> getTickets() {
-//		List<Ticket> ticket = ticketService.findAll();
-//		return ticket;
-		return ticketService.findAll();
+		List<Ticket> ticket = ticketService.findAll();
+		return ticket;
 	}
 
 	// listando tickets abertos
@@ -71,9 +71,8 @@ public class TicketController {
 	// recuperando um unico ticket
 	@GetMapping("ticket/{id}")
 	public Ticket getUniqueTicket(@PathVariable("id") long id) {
-//		Ticket ticket = ticketService.findById(id);
-//		return ticket;
-		return ticketService.findById(id);
+		Ticket ticket = ticketService.findById(id);
+		return ticket;
 	}
 
 	// novoTicket(recebe um carro e uma vaga, ocupa a vaga)
@@ -86,10 +85,12 @@ public class TicketController {
 		Ticket ticket = new Ticket(ticketParam);
 
 		if (ticketService.save(ticket) == null) {
+			System.out.println("entrou no nulo");
 			return ResponseEntity.badRequest().build();
 		} else {
 
 			ticketService.save(ticket);
+			// System.out.println(ticket);
 			vagaService.ocuparVaga(ticket.getVaga().getId());
 
 			URI uri = uriBuilder.path("/ticket/{id}").buildAndExpand(ticket.getId()).toUri();
@@ -104,15 +105,15 @@ public class TicketController {
 	public ResponseEntity<Ticket> finalizarTicket(@PathVariable Long id, TicketServiceImpl ticketService) {
 		Optional<Ticket> optionalTicket = ticketRepository.findById(id);
 
+		
 		if (optionalTicket.isPresent()) {
 
-			// se estiver presente e receber valor null do metodo finalizar, responde bad
-			// request, senão fianaliza
+			//se estiver presente e receber valor null do metodo finalizar, responde bad
+			//request, senão fianaliza
 			if (ticketService.finalizar(id, ticketRepository) == null) {
-	
+				System.out.println("Esse ticket provavelmente ja foi finalizado");
 				return ResponseEntity.badRequest().build();
 				
-
 			} else {
 
 				ticketService.finalizar(id, ticketRepository);
@@ -121,8 +122,8 @@ public class TicketController {
 			}
 		}
 
-		// se nao estiver presente retorna not found
+		//se nao estiver presente retorna not found
 		return ResponseEntity.notFound().build();
 	}
-		
+
 }
