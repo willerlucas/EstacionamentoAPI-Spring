@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tb_veiculo")
@@ -16,10 +16,10 @@ public class Veiculo {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long Id;
 	
-	@NotBlank
+	//@NotNull(message = "Por favor informe a placa do veiculo") 
 	private String placa;
 	
-	@NotBlank
+	@NotNull(message = "Por favor informe o modelo do veiculo") 
 	private String modelo;
 	
 	@Enumerated(EnumType.STRING)
@@ -27,7 +27,7 @@ public class Veiculo {
 	
 	private boolean zeroKm = false;
 
-	Veiculo(){
+	public Veiculo(){
 		
 	}
 	

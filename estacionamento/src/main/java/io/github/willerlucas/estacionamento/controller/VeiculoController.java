@@ -37,8 +37,9 @@ public class VeiculoController {
 	//recuperando todos os veiculos
 		@GetMapping("/veiculo")
 		public List<Veiculo> getVeiculos() {
-			List<Veiculo> veiculos = veiculoService.findAll(); 
-			return veiculos;
+//			List<Veiculo> veiculos = veiculoService.findAll(); 
+//			return veiculos;
+			return veiculoService.findAll();
 		}
 		
 		//recuperando um unico veiculo
@@ -46,10 +47,11 @@ public class VeiculoController {
 		public Veiculo getUniqueVeiculo(@PathVariable("id") long id) {
 			
 			//filtrando por Id
-			Veiculo veiculo = veiculoService.findById(id); 
-			
-			
-			return veiculo;
+//			Veiculo veiculo = veiculoService.findById(id); 
+//			
+//			
+//			return veiculo;
+			return veiculoService.findById(id);
 			
 		}
 			

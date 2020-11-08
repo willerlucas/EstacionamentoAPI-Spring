@@ -1,7 +1,6 @@
 package io.github.willerlucas.estacionamento.serviceImpl;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,14 +11,9 @@ import javax.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.github.willerlucas.estacionamento.model.Cliente;
-import io.github.willerlucas.estacionamento.model.Ticket;
 import io.github.willerlucas.estacionamento.model.Vaga;
 import io.github.willerlucas.estacionamento.model.VagaStatus;
-import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.repository.VagaRepository;
-import io.github.willerlucas.estacionamento.repository.VeiculoRepository;
-import io.github.willerlucas.estacionamento.service.VeiculoService;
 
 @Service
 public class VagaServiceImpl {

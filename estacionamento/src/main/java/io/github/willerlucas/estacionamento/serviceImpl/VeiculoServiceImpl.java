@@ -9,10 +9,8 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.github.willerlucas.estacionamento.model.Ticket;
 import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.model.VeiculoTipo;
-import io.github.willerlucas.estacionamento.repository.ClienteRepository;
 import io.github.willerlucas.estacionamento.repository.VeiculoRepository;
 import io.github.willerlucas.estacionamento.service.VeiculoService;
 

@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.github.willerlucas.estacionamento.config.validacao.VeiculoJaPossuiDono;
 import io.github.willerlucas.estacionamento.model.Cliente;
 import io.github.willerlucas.estacionamento.model.Veiculo;
 import io.github.willerlucas.estacionamento.repository.ClienteRepository;
@@ -106,7 +105,7 @@ public class ClienteServiceImpl implements ClienteService {
 		
 		Cliente cliente = clienteRepository.getOne(idc);
 		Veiculo veiculo = veiculoRepository.getOne(idv);
-		Veiculo aux = veiculo;
+		//Veiculo aux = veiculo;
 		//verifica se o veiculo ja possui dono
 		//try {
 			//if (veiculoService.verificaVeiculoDono(veiculo)) throw new VeiculoJaPossuiDono();
