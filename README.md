@@ -1,4 +1,4 @@
-# spring-boot-estacionamento
+# Instruções de uso
 
 Instruções de uso:
 Assim que o projeto for importado para a IDE, alterar o arquivo [application.properties](https://github.com/willerlucas/spring-boot-estacionamento/blob/main/estacionamento/src/main/resources/application.properties) nas linhas 6 e 7 para confingurar seus dados de acesso do MySQL.
