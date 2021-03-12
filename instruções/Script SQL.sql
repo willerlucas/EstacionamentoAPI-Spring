@@ -11,6 +11,7 @@ CREATE TABLE `estacionamento`.`tb_cliente` (
   PRIMARY KEY (`id`));
 
 
+
 CREATE TABLE `estacionamento`.`tb_veiculo` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `modelo` VARCHAR(255),
